@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import AIBot from "./pages/AIBot";
 import Schemes from "./pages/Schemes";
+import Dashboard from "./pages/Dashboard";
 import Knowledge from "./pages/Knowledge";
 import About from "./pages/About";
 import Auth from "./pages/Auth";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/schemes" element={<Schemes />} />
           <Route path="/knowledge" element={<Knowledge />} />
           <Route path="/about" element={<About />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
