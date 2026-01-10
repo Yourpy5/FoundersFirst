@@ -1,6 +1,9 @@
-def main():
-    print("Hello from ai-backend!")
+from fastapi import FastAPI
+
+app = FastAPI()
 
 
-if __name__ == "__main__":
-    main()
+
+@app.post("/test")
+def initialTest():
+    return {"message": "API is working"}
