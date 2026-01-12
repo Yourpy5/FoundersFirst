@@ -5,6 +5,7 @@ from db import get_db_connection
 from dotenv import load_dotenv
 import jwt
 import datetime
+import requests
 
 #for loading .env file
 load_dotenv()
@@ -13,7 +14,7 @@ app = Flask(__name__)
 #for cross origin communication 
 CORS(app)  
 bcrypt = Bcrypt(app)
-
+AI_Backend_URL = "http://127.0.0.1:8001"
 
 @app.route("/roadmap_genration_form" , methods = ["POST"])
 def roadmap_genration_form():
@@ -47,6 +48,10 @@ def roadmap_genration_form():
     conn.close()
     return ({"message" : "startup form sunmitted successfully"}), 201
 
+@app.route("/test",methods = ["GET"])
+def testapi():
+    data= requests.get(AI_Backend_URL + "/test")
+    return jsonify(data.json()), 200
 
 #signup api where all the three variables fetching data from the data which is requested by the frontend and simply saving the data into the database.
 @app.route("/signup", methods=["POST"])
