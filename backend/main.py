@@ -123,7 +123,7 @@ def login():
     if bcrypt.check_password_hash(user[1], password):
         token = jwt.encode({
             "user_id": user[0],
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1)
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24)
         }, SECRET_KEY, algorithm="HS256")
 
         return jsonify({
@@ -225,6 +225,30 @@ def generate_roadmap():
 
     return jsonify({
         "roadmap": roadmap
+    }), 200
+
+
+@app.route("/user-profile", methods=["GET"])
+def get_user_profile():
+    user_id = get_user_from_token()
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT id, name, email FROM users WHERE id=%s", (user_id,))
+    user = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    return jsonify({
+        "id": str(user[0]),
+        "displayName": user[1],
+        "email": user[2]
     }), 200
 
 

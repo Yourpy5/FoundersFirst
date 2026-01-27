@@ -2,8 +2,16 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export function HeroSection() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background with Indian-inspired warmth */}
@@ -81,7 +89,7 @@ export function HeroSection() {
             <ChevronLeft className="w-6 h-6 text-muted-foreground/50 animate-pulse" />
             
             <Button variant="hero" size="xl" asChild>
-              <Link to="/ai-bot" className="flex items-center gap-3">
+              <Link to={isLoggedIn ? "/ai-bot" : "/auth"} className="flex items-center gap-3">
                 Start Here
                 <ArrowRight className="w-5 h-5" />
               </Link>

@@ -23,7 +23,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/ai-bot" element={<AIBot />} />
+          <Route path="/ai-bot" element={<ProtectedRoute><AIBot /></ProtectedRoute>} />
           <Route path="/schemes" element={<Schemes />} />
           <Route path="/knowledge" element={<Knowledge />} />
           <Route path="/about" element={<About />} />

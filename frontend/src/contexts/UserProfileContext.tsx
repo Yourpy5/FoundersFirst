@@ -47,11 +47,8 @@ const defaultProfile: UserProfile = {
 const UserProfileContext = createContext<UserProfileContextType | undefined>(undefined);
 
 export function UserProfileProvider({ children }: { children: ReactNode }) {
-  const [profile, setProfile] = useState<UserProfile>(() => {
-    const saved = localStorage.getItem('userProfile');
-    return saved ? { ...defaultProfile, ...JSON.parse(saved) } : defaultProfile;
-  });
-  
+  const [profile, setProfile] = useState<UserProfile>(defaultProfile);
+  const [isLoading, setIsLoading] = useState(true);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [stats] = useState({
     aiInteractions: 12,
@@ -60,9 +57,35 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
     roadmapProgress: 35,
   });
 
+  // Fetch user profile from backend on mount
   useEffect(() => {
-    localStorage.setItem('userProfile', JSON.stringify(profile));
-  }, [profile]);
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5000/user-profile', {
+          headers: { 'Authorization': token }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setProfile(prev => ({ ...prev, ...data }));
+        } else{
+          localStorage.removeItem('token');
+        }
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [])
 
   useEffect(() => {
     // Show onboarding if profile is incomplete and not previously completed

@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 
 const publicNavLinks = [
   { label: "Home", href: "/" },
-  { label: "AI Bot", href: "/ai-bot" },
   { label: "Schemes", href: "/schemes" },
   { label: "Knowledge Bank", href: "/knowledge" },
   { label: "About Us", href: "/about" },
